@@ -10,6 +10,12 @@ import UIKit
 
 class MainViewController: UIViewController {
 
+  private var mainView: MainView {
+    return view as! MainView
+  }
+
+  private var datasource = MovieResultsDataSource()
+
   init() {
     super.init(nibName: nil, bundle: nil)
   }
@@ -20,13 +26,17 @@ class MainViewController: UIViewController {
 
   override func loadView() {
     super.loadView()
+
+    self.view = MainView(with: self, tableViewDatasource: datasource)
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     title = NSLocalizedString("Search Movies", comment: "Navigation bar title for Main Screen")
-    self.view.backgroundColor = .white
+
+    // Setup main view
+    mainView.setup()
   }
 
   override func didReceiveMemoryWarning() {
@@ -34,6 +44,9 @@ class MainViewController: UIViewController {
     // Dispose of any resources that can be recreated.
   }
 
+}
 
+extension MainViewController: UITableViewDelegate {
+  
 }
 
