@@ -30,12 +30,13 @@ class MainView: UIView {
     searchBar.autocapitalizationType = .none
     searchBar.autocorrectionType = .no
     searchBar.spellCheckingType = .no
-    searchBar.searchBarStyle = .prominent
+    searchBar.searchBarStyle = .minimal
+    searchBar.placeholder = NSLocalizedString("Enter keywords", comment: "Placeholder text for movie search bar")
 
     return searchController
   }()
 
-  init(with tableViewDelegate: UITableViewDelegate, tableViewDatasource: UITableViewDataSource, searchResultsController: UISearchBarDelegate) {
+  init(with tableViewDelegate: UITableViewDelegate, tableViewDatasource: UITableViewDataSource, searchBarDelegate: UISearchBarDelegate) {
 
     super.init(frame: .zero)
 
@@ -43,8 +44,7 @@ class MainView: UIView {
     tableView.dataSource = tableViewDatasource
     tableView.tableHeaderView = searchController.searchBar
 
-//    searchController.searchResultsUpdater = searchResultsController
-    searchController.searchBar.delegate = searchResultsController
+    searchController.searchBar.delegate = searchBarDelegate
 
     addSubview(tableView)
   }

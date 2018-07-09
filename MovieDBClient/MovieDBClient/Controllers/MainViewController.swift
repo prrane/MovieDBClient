@@ -14,7 +14,7 @@ class MainViewController: UIViewController {
     return view as! MainView
   }
 
-  private var datasource = MovieResultsDataSource()
+  private var resultController = MovieResultsController()
 
   init() {
     super.init(nibName: nil, bundle: nil)
@@ -27,7 +27,7 @@ class MainViewController: UIViewController {
   override func loadView() {
     super.loadView()
 
-    self.view = MainView(with: self, tableViewDatasource: datasource, searchResultsController: datasource)
+    self.view = MainView(with: resultController, tableViewDatasource: resultController, searchBarDelegate: resultController)
   }
 
   override func viewDidLoad() {
@@ -36,7 +36,7 @@ class MainViewController: UIViewController {
     title = NSLocalizedString("Search Movies", comment: "Navigation bar title for Main Screen")
 
     // Setup datasource
-    datasource.setup(with: mainView.refresh, dismissSearchCallback: mainView.dismissSearch)
+    resultController.setup(with: mainView.refresh, dismissSearchCallback: mainView.dismissSearch)
     
     // Setup main view
     mainView.setup()
@@ -48,8 +48,4 @@ class MainViewController: UIViewController {
     CacheManager.searchResultsCache.clearCache()
   }
 
-}
-
-extension MainViewController: UITableViewDelegate {
-  
 }

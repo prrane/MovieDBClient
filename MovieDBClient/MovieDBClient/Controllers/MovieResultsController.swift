@@ -10,7 +10,7 @@ import UIKit
 
 typealias Callback = (() -> Void)?
 
-class MovieResultsDataSource: NSObject {
+class MovieResultsController: NSObject {
 
   // ivars to be set during initialization
   private var refreshCallback: (() -> Void)?
@@ -45,7 +45,7 @@ class MovieResultsDataSource: NSObject {
 
 // MARK: - UITableViewDataSource
 
-extension MovieResultsDataSource: UITableViewDataSource {
+extension MovieResultsController: UITableViewDataSource {
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return numberOfRows(inSection: section)
@@ -79,9 +79,19 @@ extension MovieResultsDataSource: UITableViewDataSource {
 
 }
 
+// MARK: - UITableViewDelegate
+
+extension MovieResultsController: UITableViewDelegate {
+
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+  }
+
+}
+
 // MARK: - UISearchBarDelegate
 
-extension MovieResultsDataSource: UISearchBarDelegate {
+extension MovieResultsController: UISearchBarDelegate {
 
   public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
     isSearching = true
