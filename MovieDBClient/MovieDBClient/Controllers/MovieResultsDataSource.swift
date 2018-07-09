@@ -8,11 +8,17 @@
 
 import UIKit
 
-class MovieResultsDataSource: NSObject, UITableViewDataSource {
+typealias Callback = (() -> Void)?
+
+class MovieResultsDataSource: NSObject {
 
   // ivars to be set during initialization
-  var datasourceUpdatedCallback: (() -> Void)?
-  var searchDismissCallback: (() -> Void)?
+  private var refreshCallback: (() -> Void)?
+  private var dismissSearchCallback: (() -> Void)?
+
+  private var movieDatasource: [Movie] {
+    return CacheManager.searchResultsCache.movies
+  }
 
   private var keywordsDatasource: [String] {
     guard let keyword = searchKeyword, !keyword.isEmpty else {
@@ -25,30 +31,55 @@ class MovieResultsDataSource: NSObject, UITableViewDataSource {
 
   private var searchKeyword: String? = nil {
     didSet {
-      datasourceUpdatedCallback?()
+      refreshCallback?()
     }
   }
 
   private var isSearching: Bool = false
 
+  func setup(with refreshCallback: Callback, dismissSearchCallback: Callback) {
+    self.refreshCallback = refreshCallback
+    self.dismissSearchCallback = dismissSearchCallback
+  }
+}
+
+// MARK: - UITableViewDataSource
+
+extension MovieResultsDataSource: UITableViewDataSource {
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return isSearching ? keywordsDatasource.count : 0
+    return numberOfRows(inSection: section)
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard !isSearching else {
-      let cell = tableView.dequeueReusableCell(withIdentifier: SearchKeywordCell.reuseIdentifier, for: indexPath) as! SearchKeywordCell
-      cell.setup(with: keywordsDatasource[indexPath.row])
-      return cell
+      return searchKeywordCell(for: indexPath, in: tableView)
     }
 
+    return movieCell(for: indexPath, in: tableView)
+  }
+
+  // MARK: Helpers
+
+  private func numberOfRows(inSection: Int) -> Int {
+    return isSearching ? keywordsDatasource.count : movieDatasource.count
+  }
+
+  private func movieCell(for indexPath: IndexPath, in tableView: UITableView) -> MovieCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.reuseIdentifier, for: indexPath) as! MovieCell
     cell.setup()
+    return cell
+  }
 
+  private func searchKeywordCell(for indexPath: IndexPath, in tableView: UITableView) -> SearchKeywordCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: SearchKeywordCell.reuseIdentifier, for: indexPath) as! SearchKeywordCell
+    cell.setup(with: keywordsDatasource[indexPath.row])
     return cell
   }
 
 }
+
+// MARK: - UISearchBarDelegate
 
 extension MovieResultsDataSource: UISearchBarDelegate {
 
@@ -60,15 +91,15 @@ extension MovieResultsDataSource: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     isSearching = false
     searchKeyword = nil
-    searchDismissCallback?()
+    dismissSearchCallback?()
   }
 
-  public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {    
+  public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
     searchKeyword = searchBar.text
     isSearching = false
 
     guard let keyword = searchKeyword, !keyword.isEmpty else {
-      searchDismissCallback?()
+      dismissSearchCallback?()
       return
     }
 
@@ -78,7 +109,7 @@ extension MovieResultsDataSource: UISearchBarDelegate {
       return
     }
 
-    searchDismissCallback?()
+    dismissSearchCallback?()
     // Search keyword
   }
 

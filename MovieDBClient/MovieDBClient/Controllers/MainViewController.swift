@@ -35,16 +35,17 @@ class MainViewController: UIViewController {
 
     title = NSLocalizedString("Search Movies", comment: "Navigation bar title for Main Screen")
 
+    // Setup datasource
+    datasource.setup(with: mainView.refresh, dismissSearchCallback: mainView.dismissSearch)
+    
     // Setup main view
     mainView.setup()
-
-    datasource.datasourceUpdatedCallback = mainView.reload
-    datasource.searchDismissCallback = mainView.dismissSearch
   }
 
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+
+    CacheManager.searchResultsCache.clearCache()
   }
 
 }
@@ -52,32 +53,3 @@ class MainViewController: UIViewController {
 extension MainViewController: UITableViewDelegate {
   
 }
-//
-//extension MainViewController: UISearchResultsUpdating {
-//
-//  func updateSearchResults(for searchController: UISearchController) {
-//    datasource.searchKeyword = searchController.searchBar.text
-//  }
-//
-//}
-//
-//extension MainViewController: UISearchBarDelegate {
-//
-//  public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-//    datasource.isSearching = true
-//    mainView.reload()
-//  }
-//
-//  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//    datasource.isSearching = false
-//    mainView.reload()
-//  }
-//
-//  public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//    searchBar.resignFirstResponder()
-//    datasource.searchKeyword = searchBar.text
-//    datasource.isSearching = false
-//  }
-//
-//}
-//

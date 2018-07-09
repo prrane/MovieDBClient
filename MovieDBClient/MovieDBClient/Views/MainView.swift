@@ -54,6 +54,8 @@ class MainView: UIView {
   }
   public func setup() {
     self.backgroundColor = .lightGray
+
+    refresh()
   }
 
   override func layoutSubviews() {
@@ -62,7 +64,7 @@ class MainView: UIView {
     tableView.frame = frame
   }
 
-  func reload() {
+  func refresh() {
     tableView.reloadData()
   }
 
