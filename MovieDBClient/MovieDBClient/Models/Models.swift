@@ -11,15 +11,39 @@ import Foundation
 /**
  `APIResponse->response` Sample data
   "title": "Batman",
+  "id": 268,
   "release_date": "1989-06-23",
   "overview": "The Dark Knight of Gotham City begins his war on crime with his first major enemy being the clownishly homicidal Joker",
   "poster_path": "\/kBf3g9crrADGMc2AMAMlLBgSm2h.jpg"
   */
-struct Movie: Codable {
+public class Movie: NSObject, Codable & NSCoding {
+
+  public func encode(with aCoder: NSCoder) {
+    aCoder.encode(title, forKey: CodingKeys.title.description)
+    aCoder.encode(id, forKey: CodingKeys.id.description)
+    aCoder.encode(releaseDate, forKey: CodingKeys.releaseDate.description)
+    aCoder.encode(overview, forKey: CodingKeys.overview.description)
+    aCoder.encode(posterPath, forKey: CodingKeys.posterPath.description)
+  }
+
+  public required init?(coder aDecoder: NSCoder) {
+    title = aDecoder.decodeObject(forKey: CodingKeys.title.description) as! String
+    id = aDecoder.decodeInteger(forKey: CodingKeys.id.description)
+    releaseDate = aDecoder.decodeObject(forKey: CodingKeys.releaseDate.description) as! String
+    overview = aDecoder.decodeObject(forKey: CodingKeys.overview.description) as! String
+    posterPath = aDecoder.decodeObject(forKey: CodingKeys.posterPath.description) as? String
+  }
+
   let title: String
+  let id: Int
   let releaseDate: String
   let overview: String
   let posterPath: String? // this is optional as per API Docs
+
+  public override var description: String {
+    return "\(title) : \(id)"
+  }
+
 }
 
 /**
@@ -40,12 +64,12 @@ struct Movie: Codable {
   "errors": ["query must be provided"]
  */
 
-enum APIError {
+public enum APIError {
   case success
   case error(message: String)
 }
 
-struct APIResponse: Codable {
+public struct APIResponse: Codable {
   // Success
   let currentPage: Int  // Starts from `1`
   let totalResults: Int
