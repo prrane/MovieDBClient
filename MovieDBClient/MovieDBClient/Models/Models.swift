@@ -39,6 +39,12 @@ struct Movie: Codable {
 
   "errors": ["query must be provided"]
  */
+
+enum APIError {
+  case success
+  case error(message: String)
+}
+
 struct APIResponse: Codable {
   // Success
   let currentPage: Int  // Starts from `1`
@@ -50,6 +56,13 @@ struct APIResponse: Codable {
   let statusMessage: String?
   let success: Bool?
   let errors: [String]?
+
+  var apiError: APIError {
+    let hasError = !(success ?? true) && !((errors ?? []).isEmpty)
+    let errorMessage = statusMessage ?? errors?.joined(separator: "\n") ?? NSLocalizedString("Something went wrong, please try later", comment: "Generic error message")
+
+    return hasError ? .error(message: errorMessage) : .success
+  }
 
   private enum CodingKeys: String, CodingKey {
     // Success

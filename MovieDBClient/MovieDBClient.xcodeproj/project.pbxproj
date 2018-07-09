@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		110BED10CA3DD1D363F80A4B /* Pods_MovieDBClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB55E086D6792D41A7D04FEA /* Pods_MovieDBClient.framework */; };
 		B11A3CC320F1E6A3008310AD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11A3CC220F1E6A3008310AD /* AppDelegate.swift */; };
 		B11A3CC520F1E6A3008310AD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11A3CC420F1E6A3008310AD /* MainViewController.swift */; };
 		B11A3CCA20F1E6A5008310AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B11A3CC920F1E6A5008310AD /* Assets.xcassets */; };
@@ -21,6 +22,7 @@
 		B1F3ACE220F2113800DED68A /* error_response.json in Resources */ = {isa = PBXBuildFile; fileRef = B1F3ACDF20F2113700DED68A /* error_response.json */; };
 		B1F3ACE320F2113800DED68A /* valid_response_no_results.json in Resources */ = {isa = PBXBuildFile; fileRef = B1F3ACE020F2113800DED68A /* valid_response_no_results.json */; };
 		B1F3ACE520F214D000DED68A /* valid_response_no_poster.json in Resources */ = {isa = PBXBuildFile; fileRef = B1F3ACE420F214D000DED68A /* valid_response_no_poster.json */; };
+		DA704F9B9B117D29F2FA0BDF /* Pods_MovieDBClientTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4390C4FBE531C967B0C9D2F0 /* Pods_MovieDBClientTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D6589F7B539A8CF2E8CDCB1 /* Pods-MovieDBClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieDBClientTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieDBClientTests/Pods-MovieDBClientTests.release.xcconfig"; sourceTree = "<group>"; };
+		3CFEA3EA0D651E437A6EC011 /* Pods-MovieDBClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieDBClientTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieDBClientTests/Pods-MovieDBClientTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4390C4FBE531C967B0C9D2F0 /* Pods_MovieDBClientTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieDBClientTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		57D85B13D8912EB38C57E129 /* Pods-MovieDBClient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieDBClient.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieDBClient/Pods-MovieDBClient.release.xcconfig"; sourceTree = "<group>"; };
 		B11A3CBF20F1E6A3008310AD /* MovieDBClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieDBClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B11A3CC220F1E6A3008310AD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B11A3CC420F1E6A3008310AD /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -52,6 +58,8 @@
 		B1F3ACDF20F2113700DED68A /* error_response.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error_response.json; sourceTree = "<group>"; };
 		B1F3ACE020F2113800DED68A /* valid_response_no_results.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = valid_response_no_results.json; sourceTree = "<group>"; };
 		B1F3ACE420F214D000DED68A /* valid_response_no_poster.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = valid_response_no_poster.json; sourceTree = "<group>"; };
+		CB55E086D6792D41A7D04FEA /* Pods_MovieDBClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieDBClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8D95C1C087070C97976FEEF /* Pods-MovieDBClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieDBClient.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieDBClient/Pods-MovieDBClient.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				110BED10CA3DD1D363F80A4B /* Pods_MovieDBClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA704F9B9B117D29F2FA0BDF /* Pods_MovieDBClientTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +88,8 @@
 				B11A3CC120F1E6A3008310AD /* MovieDBClient */,
 				B11A3CD620F1E6A5008310AD /* MovieDBClientTests */,
 				B11A3CC020F1E6A3008310AD /* Products */,
+				F83D3A06BC4B924F7E5AB244 /* Pods */,
+				BE371495131E89F68E44D78F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -160,6 +172,26 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		BE371495131E89F68E44D78F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CB55E086D6792D41A7D04FEA /* Pods_MovieDBClient.framework */,
+				4390C4FBE531C967B0C9D2F0 /* Pods_MovieDBClientTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F83D3A06BC4B924F7E5AB244 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E8D95C1C087070C97976FEEF /* Pods-MovieDBClient.debug.xcconfig */,
+				57D85B13D8912EB38C57E129 /* Pods-MovieDBClient.release.xcconfig */,
+				3CFEA3EA0D651E437A6EC011 /* Pods-MovieDBClientTests.debug.xcconfig */,
+				2D6589F7B539A8CF2E8CDCB1 /* Pods-MovieDBClientTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -167,9 +199,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B11A3CDC20F1E6A5008310AD /* Build configuration list for PBXNativeTarget "MovieDBClient" */;
 			buildPhases = (
+				0C85E7D6D279A65403B3FD01 /* [CP] Check Pods Manifest.lock */,
 				B11A3CBB20F1E6A3008310AD /* Sources */,
 				B11A3CBC20F1E6A3008310AD /* Frameworks */,
 				B11A3CBD20F1E6A3008310AD /* Resources */,
+				0D01A26B01C12E069BC54C6E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -184,6 +218,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B11A3CDF20F1E6A5008310AD /* Build configuration list for PBXNativeTarget "MovieDBClientTests" */;
 			buildPhases = (
+				1A3A40BC11252455722396DD /* [CP] Check Pods Manifest.lock */,
 				B11A3CCF20F1E6A5008310AD /* Sources */,
 				B11A3CD020F1E6A5008310AD /* Frameworks */,
 				B11A3CD120F1E6A5008310AD /* Resources */,
@@ -259,6 +294,63 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0C85E7D6D279A65403B3FD01 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MovieDBClient-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0D01A26B01C12E069BC54C6E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MovieDBClient/Pods-MovieDBClient-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/PINCache/PINCache.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PINCache.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MovieDBClient/Pods-MovieDBClient-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1A3A40BC11252455722396DD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MovieDBClientTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B11A3CBB20F1E6A3008310AD /* Sources */ = {
@@ -420,6 +512,7 @@
 		};
 		B11A3CDD20F1E6A5008310AD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8D95C1C087070C97976FEEF /* Pods-MovieDBClient.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -440,6 +533,7 @@
 		};
 		B11A3CDE20F1E6A5008310AD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57D85B13D8912EB38C57E129 /* Pods-MovieDBClient.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -460,6 +554,7 @@
 		};
 		B11A3CE020F1E6A5008310AD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3CFEA3EA0D651E437A6EC011 /* Pods-MovieDBClientTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -481,6 +576,7 @@
 		};
 		B11A3CE120F1E6A5008310AD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D6589F7B539A8CF2E8CDCB1 /* Pods-MovieDBClientTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

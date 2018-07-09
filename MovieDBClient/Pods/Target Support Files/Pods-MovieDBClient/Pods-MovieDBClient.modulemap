@@ -1,0 +1,6 @@
+framework module Pods_MovieDBClient {
+  umbrella header "Pods-MovieDBClient-umbrella.h"
+
+  export *
+  module * { export * }
+}

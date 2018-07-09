@@ -1,0 +1,16 @@
+PODS:
+  - PINCache (2.3)
+
+DEPENDENCIES:
+  - PINCache
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - PINCache
+
+SPEC CHECKSUMS:
+  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
+
+PODFILE CHECKSUM: 96f26361e4230091a9842ce57c6212fe364a9670
+
+COCOAPODS: 1.5.2
