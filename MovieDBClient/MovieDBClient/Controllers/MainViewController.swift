@@ -27,7 +27,7 @@ class MainViewController: UIViewController {
   override func loadView() {
     super.loadView()
 
-    self.view = MainView(with: self, tableViewDatasource: datasource)
+    self.view = MainView(with: self, tableViewDatasource: datasource, searchResultsController: datasource)
   }
 
   override func viewDidLoad() {
@@ -37,6 +37,9 @@ class MainViewController: UIViewController {
 
     // Setup main view
     mainView.setup()
+
+    datasource.datasourceUpdatedCallback = mainView.reload
+    datasource.searchDismissCallback = mainView.dismissSearch
   }
 
   override func didReceiveMemoryWarning() {
@@ -49,4 +52,32 @@ class MainViewController: UIViewController {
 extension MainViewController: UITableViewDelegate {
   
 }
-
+//
+//extension MainViewController: UISearchResultsUpdating {
+//
+//  func updateSearchResults(for searchController: UISearchController) {
+//    datasource.searchKeyword = searchController.searchBar.text
+//  }
+//
+//}
+//
+//extension MainViewController: UISearchBarDelegate {
+//
+//  public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//    datasource.isSearching = true
+//    mainView.reload()
+//  }
+//
+//  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//    datasource.isSearching = false
+//    mainView.reload()
+//  }
+//
+//  public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//    searchBar.resignFirstResponder()
+//    datasource.searchKeyword = searchBar.text
+//    datasource.isSearching = false
+//  }
+//
+//}
+//
