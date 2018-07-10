@@ -57,8 +57,8 @@ class SearchOperation: AsyncOperation {
         return
       }
 
-      guard let movies = response?.movies else {
-        self?.errorMessage = "No search results returned for keyword: \(String(describing: self?.keyword))"
+      guard let movies = response?.movies, !movies.isEmpty else {
+        self?.errorMessage = "No search results returned for keyword: \(keyword)"
         self?.state = .finished
         return
       }
