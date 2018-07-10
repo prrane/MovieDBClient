@@ -18,8 +18,8 @@ class MovieResultsController: NSObject {
 
   let searchController = SearchController()
 
-  private var movieDatasource: [Movie] {
-    return CacheManager.searchResultsCache.movies
+  private var movieDatasource: SearchResultsCache {
+    return CacheManager.searchResultsCache
   }
 
   private var keywordsDatasource: [String] {
@@ -51,6 +51,10 @@ class MovieResultsController: NSObject {
 
 extension MovieResultsController: UITableViewDataSource {
 
+  func numberOfSections(in tableView: UITableView) -> Int {
+    return isSearching ? 1 : movieDatasource.numberOfSections
+  }
+
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return numberOfRows(inSection: section)
   }
@@ -66,12 +70,18 @@ extension MovieResultsController: UITableViewDataSource {
   // MARK: Helpers
 
   private func numberOfRows(inSection: Int) -> Int {
-    return isSearching ? keywordsDatasource.count : movieDatasource.count
+    return isSearching ? keywordsDatasource.count : movieDatasource.movies(forSection: inSection).count
   }
 
   private func movieCell(for indexPath: IndexPath, in tableView: UITableView) -> MovieCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.reuseIdentifier, for: indexPath) as! MovieCell
-    cell.setup(with: movieDatasource[indexPath.row], poster: nil)
+    cell.setup(with: movieDatasource.item(forIndexPath: indexPath), poster: nil)
+
+    if indexPath.row == movieDatasource.movies(forSection: indexPath.section).count - 1 {
+      if movieDatasource.shouldPrefetch(forSection: indexPath.section + 1) {
+        searchController.getNextPage()
+      }
+    }
 
     return cell
   }
@@ -98,8 +108,11 @@ extension MovieResultsController: UITableViewDelegate {
     }
   }
 
-  private func movieCellHeight(for indexPath: IndexPath, in tableView: UITableView) -> CGFloat {    
-    return MovieCell.size(for: movieDatasource[indexPath.row], width: tableView.width).height
+  private func movieCellHeight(for indexPath: IndexPath, in tableView: UITableView) -> CGFloat {
+    guard let viewModel = movieDatasource.item(forIndexPath: indexPath) else {
+      return 0
+    }
+    return MovieCell.size(for: viewModel, width: tableView.width).height
   }
 
   func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {

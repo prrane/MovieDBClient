@@ -16,15 +16,14 @@ import Foundation
   "overview": "The Dark Knight of Gotham City begins his war on crime with his first major enemy being the clownishly homicidal Joker",
   "poster_path": "\/kBf3g9crrADGMc2AMAMlLBgSm2h.jpg"
   */
-public class Movie: NSObject, Codable & NSCoding {
 
-  public func encode(with aCoder: NSCoder) {
-    aCoder.encode(title, forKey: CodingKeys.title.description)
-    aCoder.encode(id, forKey: CodingKeys.id.description)
-    aCoder.encode(releaseDate, forKey: CodingKeys.releaseDate.description)
-    aCoder.encode(overview, forKey: CodingKeys.overview.description)
-    aCoder.encode(posterPath, forKey: CodingKeys.posterPath.description)
-  }
+public class Movie: NSObject, Codable {
+
+  let title: String
+  let id: Int
+  let releaseDate: String
+  let overview: String
+  let posterPath: String? // this is optional as per API Docs
 
   public required init?(coder aDecoder: NSCoder) {
     title = aDecoder.decodeObject(forKey: CodingKeys.title.description) as! String
@@ -33,13 +32,7 @@ public class Movie: NSObject, Codable & NSCoding {
     overview = aDecoder.decodeObject(forKey: CodingKeys.overview.description) as! String
     posterPath = aDecoder.decodeObject(forKey: CodingKeys.posterPath.description) as? String
   }
-
-  let title: String
-  let id: Int
-  let releaseDate: String
-  let overview: String
-  let posterPath: String? // this is optional as per API Docs
-
+  
   public override var description: String {
     return "\(title) : \(id)"
   }
@@ -69,7 +62,7 @@ public enum APIError {
   case error(message: String)
 }
 
-public struct APIResponse: Codable {
+public class APIResponse: NSObject & Codable {
   // Success
   let currentPage: Int  // Starts from `1`
   let totalResults: Int
@@ -101,7 +94,7 @@ public struct APIResponse: Codable {
     case errors
   }
 
-  public init(from decoder: Decoder) throws {
+  public required init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
 
     let currentPage = try? container.decode(Int.self, forKey: .currentPage)

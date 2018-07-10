@@ -42,5 +42,8 @@ class SearchController: NSObject {
   func search(keyword: String) {
     searchManager.keyword = keyword
   }
-  
+
+  func getNextPage() {
+    searchManager.getNextpage()
+  }
 }

@@ -48,7 +48,7 @@ class MovieCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
 
-  public func setup(with viewModel: Movie, poster: UIImage?) {
+  public func setup(with viewModel: Movie?, poster: UIImage?) {
     self.viewModel = viewModel
 
     movieDetailsView.setup(with: viewModel)

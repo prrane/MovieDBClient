@@ -65,12 +65,12 @@ class MovieDetailsView: UIView {
     overviewLabel.text = ""
   }
 
-  public func setup(with viewModel: Movie) {
+  public func setup(with viewModel: Movie?) {
     self.viewModel = viewModel
 
-    titleLabel.text = viewModel.title
-    releaseDateLabel.text = viewModel.releaseDate
-    overviewLabel.text = viewModel.overview
+    titleLabel.text = viewModel?.title
+    releaseDateLabel.text = viewModel?.releaseDate
+    overviewLabel.text = viewModel?.overview
 
     setNeedsLayout()
     layoutIfNeeded()

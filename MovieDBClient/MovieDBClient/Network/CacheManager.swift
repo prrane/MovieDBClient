@@ -17,8 +17,12 @@ public protocol KeywordCache {
 }
 
 @objc public protocol SearchResultsCache {
-  func add(results: [Movie])
-  var movies: [Movie] { get }
+  func add(results: APIResponse)
+  func movies(forSection section: Int) -> [Movie]
+  func shouldPrefetch(forSection section: Int) -> Bool
+  func item(forIndexPath indexPath: IndexPath) -> Movie?
+
+  var numberOfSections: Int { get }
   var isUpdated: Bool { get }
   func clearCache()
 }
@@ -119,18 +123,58 @@ private final class KeywordCacheManager: KeywordCache {
 private final class SearchResultsCacheManager: NSObject, SearchResultsCache {
   static let shared = SearchResultsCacheManager()
   private let queue = DispatchQueue(label: "com.prrane.movie-db.searchResultsCache")
-  public private(set) var movies = [Movie]() {
-    didSet {
-      isUpdated = true
-    }
+  //[PageNumber: APIResponse]
+  private var cache = [Int: APIResponse]()
+  private var mostRecentSearchResults: APIResponse?
+
+  var numberOfSections: Int {
+    return cache.keys.count
+  }
+  
+  func add(results: APIResponse) {
+    cache[results.currentPage] = results
+    mostRecentSearchResults = results
+    isUpdated = true
   }
 
-  func add(results: [Movie]) {
-    movies.append(contentsOf: results)
+  func movies(forSection section: Int) -> [Movie] {
+    let page = section + 1
+    guard numberOfSections >= page else {
+      return []
+    }
+
+    return cache[page]?.movies ?? []
+  }
+
+  func shouldPrefetch(forSection section: Int) -> Bool {
+    guard let recent = mostRecentSearchResults else {
+      return true
+    }
+
+    let page = section + 1
+    if page <= recent.currentPage {
+      return false
+    }
+
+    if recent.currentPage == recent.totalPages {
+      return false
+    }
+
+    return true
+  }
+
+  func item(forIndexPath indexPath: IndexPath) -> Movie? {
+    let movies = self.movies(forSection: indexPath.section)
+    guard indexPath.row < movies.count else {
+      return nil
+    }
+
+    return movies[indexPath.row]
   }
 
   func clearCache() {
-    movies = []
+    cache.removeAll()
+    isUpdated = true
   }
 
   @objc open dynamic var isUpdated: Bool = false {
