@@ -13,6 +13,7 @@ class MainView: UIView {
   let tableView: UITableView = {
     let tableView = UITableView(frame: .zero)
     tableView.tableFooterView = UIView(frame: .zero)
+    tableView.separatorStyle = .none
     
     tableView.register(MovieCell.self, forCellReuseIdentifier: MovieCell.reuseIdentifier)
     tableView.register(SearchKeywordCell.self, forCellReuseIdentifier: SearchKeywordCell.reuseIdentifier)

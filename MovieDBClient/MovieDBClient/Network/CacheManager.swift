@@ -16,10 +16,10 @@ public protocol KeywordCache {
   var keywords: [String] { get }
 }
 
-public protocol SearchResultsCache {
+@objc public protocol SearchResultsCache {
   func add(results: [Movie])
   var movies: [Movie] { get }
-
+  var isUpdated: Bool { get }
   func clearCache()
 }
 
@@ -32,7 +32,7 @@ public protocol MoviePosterCache {
 
 class CacheManager {
   public static let keywordCache: KeywordCache = KeywordCacheManager.shared
-  public static let searchResultsCache: SearchResultsCache = SearchResultsCacheManager.shared
+  public static let searchResultsCache: NSObject & SearchResultsCache = SearchResultsCacheManager.shared
   public static let moviePosterCache: MoviePosterCache = MoviePosterCacheManager.shared
 }
 
@@ -56,6 +56,7 @@ class CacheManager {
     keyword = aDecoder.decodeObject(forKey: "keyword") as? String ?? ""
     entryTime = aDecoder.decodeObject(forKey: "entryTime") as? Date ?? Date.distantPast
   }
+
 }
 
 private final class KeywordCacheManager: KeywordCache {
@@ -63,7 +64,7 @@ private final class KeywordCacheManager: KeywordCache {
   static let shared = KeywordCacheManager()
 
   private struct Constants {
-    static let maxKeywordCount: Int = 3
+    static let maxKeywordCount: Int = 10
     static let cacheKey = "KeywordCache"
 
     static let cacheAgeLimit: TimeInterval = 7 * 60 * 60 * 24   // Cache for 7 days in seconds
@@ -84,14 +85,19 @@ private final class KeywordCacheManager: KeywordCache {
   }
 
   public func add(keyword: String) {
-    let cacheEntries = entries
+    var cacheEntries = entries
     let entry = KeywordEntry(keyword: keyword, entryTime: Date())
 
-    if !cacheEntries.contains(entry), cacheEntries.count >= Constants.maxKeywordCount {
+    let existingEntries = cacheEntries.filter { $0.keyword == keyword }
+    if let entry = existingEntries.first, let index = cacheEntries.index(of: entry) {
+      cacheEntries.remove(at: index)
+    }
+
+    if cacheEntries.count >= Constants.maxKeywordCount {
       purgeLastKeyword()
     }
 
-    cache[Constants.cacheKey] =  entries + [entry]
+    cache[Constants.cacheKey] =  cacheEntries + [entry]
   }
 
   // MARK: Internal
@@ -110,10 +116,14 @@ private final class KeywordCacheManager: KeywordCache {
 
 // MARK: - SearchResultsCacheManager
 
-private final class SearchResultsCacheManager: SearchResultsCache {
+private final class SearchResultsCacheManager: NSObject, SearchResultsCache {
   static let shared = SearchResultsCacheManager()
   private let queue = DispatchQueue(label: "com.prrane.movie-db.searchResultsCache")
-  public private(set) var movies = [Movie]()
+  public private(set) var movies = [Movie]() {
+    didSet {
+      isUpdated = true
+    }
+  }
 
   func add(results: [Movie]) {
     movies.append(contentsOf: results)
@@ -121,6 +131,15 @@ private final class SearchResultsCacheManager: SearchResultsCache {
 
   func clearCache() {
     movies = []
+  }
+
+  @objc open dynamic var isUpdated: Bool = false {
+    willSet {
+      willChangeValue(forKey: "isUpdated")
+    }
+    didSet {
+      didChangeValue(forKey: "isUpdated")
+    }
   }
 }
 

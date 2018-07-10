@@ -16,6 +16,8 @@ class MovieResultsController: NSObject {
   private var refreshCallback: (() -> Void)?
   private var dismissSearchCallback: (() -> Void)?
 
+  let searchController = SearchController()
+
   private var movieDatasource: [Movie] {
     return CacheManager.searchResultsCache.movies
   }
@@ -40,6 +42,8 @@ class MovieResultsController: NSObject {
   func setup(with refreshCallback: Callback, dismissSearchCallback: Callback) {
     self.refreshCallback = refreshCallback
     self.dismissSearchCallback = dismissSearchCallback
+
+    searchController.setup(with: refreshCallback)
   }
 }
 
@@ -67,13 +71,15 @@ extension MovieResultsController: UITableViewDataSource {
 
   private func movieCell(for indexPath: IndexPath, in tableView: UITableView) -> MovieCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.reuseIdentifier, for: indexPath) as! MovieCell
-    cell.setup()
+    cell.setup(with: movieDatasource[indexPath.row], poster: nil)
+
     return cell
   }
 
   private func searchKeywordCell(for indexPath: IndexPath, in tableView: UITableView) -> SearchKeywordCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: SearchKeywordCell.reuseIdentifier, for: indexPath) as! SearchKeywordCell
     cell.setup(with: keywordsDatasource[indexPath.row])
+
     return cell
   }
 
@@ -83,8 +89,42 @@ extension MovieResultsController: UITableViewDataSource {
 
 extension MovieResultsController: UITableViewDelegate {
 
+  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    if isSearching {
+      return 40
+    }
+    else {
+      return movieCellHeight(for: indexPath, in: tableView)
+    }
+  }
+
+  private func movieCellHeight(for indexPath: IndexPath, in tableView: UITableView) -> CGFloat {    
+    return MovieCell.size(for: movieDatasource[indexPath.row], width: tableView.width).height
+  }
+
+  func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+    return true
+  }
+
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
+
+    if isSearching {
+      let cell = searchKeywordCell(for: indexPath, in: tableView)
+      let keyword = cell.textLabel?.text
+
+      guard let searchKeyword = keyword else {
+        isSearching = false
+        dismissSearchCallback?()
+        refreshCallback?()
+        return
+      }
+
+      searchController.search(keyword: searchKeyword)
+      isSearching = false
+      dismissSearchCallback?()
+      refreshCallback?()
+    }
   }
 
 }
@@ -121,6 +161,8 @@ extension MovieResultsController: UISearchBarDelegate {
 
     dismissSearchCallback?()
     // Search keyword
+
+    searchController.search(keyword: keyword)
   }
 
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

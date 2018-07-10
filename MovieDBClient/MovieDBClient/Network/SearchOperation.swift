@@ -65,6 +65,7 @@ class SearchOperation: AsyncOperation {
 
       print("Fetched movies [\(movies.count)]: current page: \(response!.currentPage), total pages: \(response!.totalPages) \n")
 
+      CacheManager.keywordCache.add(keyword: keyword)
       CacheManager.searchResultsCache.add(results: movies)
 
       self?.state = .finished
