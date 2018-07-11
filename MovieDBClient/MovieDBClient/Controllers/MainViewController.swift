@@ -58,7 +58,8 @@ class MainViewController: UIViewController {
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
 
-    CacheManager.searchResultsCache.clearCache()
+    // Clear cache
+    CacheManager.moviePosterCache.clearCache()
   }
 
 }

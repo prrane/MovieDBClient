@@ -30,6 +30,8 @@ public protocol KeywordCache {
 @objc public protocol MoviePosterCache {
   func moviePoster(for movieId: Int) -> UIImage?
   func add(moviePoster poster: UIImage?, with movieId: Int)
+  func clearCache()
+
   var isUpdated: Bool { get }
 }
 
@@ -208,6 +210,10 @@ private final class MoviePosterCacheManager: NSObject,  MoviePosterCache {
     cache.memoryCache.costLimit = Constants.maxImageMemoryCostLimit
     return cache
   }()
+
+  func clearCache() {
+    imageCache.removeAllObjects()
+  }
 
   // Using synchronus calls, as the image size is small and good RAM cache is available
   func moviePoster(for movieId: Int) -> UIImage? {
