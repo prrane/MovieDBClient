@@ -1,7 +1,7 @@
 //  AppDelegate.swift
 //
 //  Created by Prashant Rane.
-//
+// App icon used from: http://dzapk.com/applications/themoviedb-adfree-the-best-entertainment-app-v1-1-apk.html
 
 import UIKit
 
