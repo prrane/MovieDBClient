@@ -2,8 +2,7 @@
 //  SearchKeywordCell.swift
 //  MovieDBClient
 //
-//  Created by Prashant Rane on 09/07/18.
-//  Copyright © 2018 Prashant Rane. All rights reserved.
+//  Created by Prashant Rane.
 //
 
 import UIKit
