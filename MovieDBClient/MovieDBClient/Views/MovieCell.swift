@@ -22,13 +22,6 @@ class MovieCell: UITableViewCell {
   let posterView = PosterView()
   let movieDetailsView = MovieDetailsView()
 
-  let hairlineBottom: UIView = {
-    let hairline = UIView(frame: .zero)
-    hairline.height = 1.0 / UIScreen.main.scale
-    hairline.backgroundColor = .lightGray
-    return hairline
-  }()
-
   var viewModel: Movie? = nil
 
   override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -36,7 +29,7 @@ class MovieCell: UITableViewCell {
 
     contentView.addSubview(posterView)
     contentView.addSubview(movieDetailsView)
-    contentView.addSubview(hairlineBottom)
+    separatorInset = UIEdgeInsets(top: 0, left: Constants.defaultPadding, bottom: 0, right: Constants.defaultPadding)
 
     decorateViewsWithBorder()
   }
@@ -96,7 +89,6 @@ class MovieCell: UITableViewCell {
     }
 
     let avilableFrame = contentView.frame
-    
     posterView.left = avilableFrame.minX
     posterView.size = PosterView.defaultSize
     posterView.top = avilableFrame.minY
@@ -105,10 +97,7 @@ class MovieCell: UITableViewCell {
     movieDetailsView.left = posterView.right
     movieDetailsView.top = posterView.top
 
-    let detailsViewSize = movieDetailsView.sizeThatFits(CGSize(width: availableWidth, height: avilableFrame.height))
-    movieDetailsView.size = detailsViewSize
-
-    hairlineBottom.frame = CGRect(x: 0, y: contentView.bottom - hairlineBottom.height, width: contentView.width, height: hairlineBottom.height)
+    movieDetailsView.size = movieDetailsView.sizeThatFits(CGSize(width: availableWidth, height: avilableFrame.height))
   }
 
 }
