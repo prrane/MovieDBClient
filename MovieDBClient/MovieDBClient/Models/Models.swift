@@ -88,7 +88,8 @@ public class APIResponse: NSObject & Codable {
   let errors: [String]?
 
   var apiError: APIError {
-    let hasError = !(success ?? true) && !((errors ?? []).isEmpty)
+    var hasError = !(success ?? true)
+    hasError = hasError || !((errors ?? []).isEmpty)
     let errorMessage = statusMessage ?? errors?.joined(separator: "\n") ?? NSLocalizedString("Something went wrong, please try later", comment: "Generic error message")
 
     return hasError ? .error(message: errorMessage) : .success
