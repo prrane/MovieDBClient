@@ -32,9 +32,22 @@ public class Movie: NSObject, Codable {
     overview = aDecoder.decodeObject(forKey: CodingKeys.overview.description) as! String
     posterPath = aDecoder.decodeObject(forKey: CodingKeys.posterPath.description) as? String
   }
+
+  //https://image.tmdb.org/t/p/w92/2DtPSyODKWXluIRV7PVru0SSzja.jpg
+  public var posterDownloadURL: URL? {
+    guard let path = posterPath else {
+      return nil
+    }
+
+    return URL(string: "https://image.tmdb.org/t/p/w185\(path)")
+  }
   
   public override var description: String {
-    return "\(title) : \(id)"
+    guard let posterPath = posterPath else {
+      return "\(title) : \(id) : NO_POSTER_AVAILABLE"
+    }
+    
+    return "\(title) : \(id) : \(posterPath)"
   }
 
 }

@@ -11,8 +11,9 @@ import UIKit
 class MovieDetailsView: UIView {
 
   struct Constants {
-    static let defaultPadding: CGFloat = 8.0
-    static let leftLayoutMargins: CGFloat = 14.0
+    static let defaultPadding: CGFloat = 10.0
+    static let verticalPaddingBetweenTitleAndDate: CGFloat = 3.0
+    static let verticalPaddingBetweenDateAndOverview: CGFloat = 8.0
 
     static let titleFont: UIFont = UIFont.systemFont(ofSize: 16, weight: .medium)
     static let releaseDateFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .light)
@@ -50,8 +51,7 @@ class MovieDetailsView: UIView {
     addSubview(releaseDateLabel)
     addSubview(overviewLabel)
 
-//    layer.borderWidth = 1
-//    layer.borderColor = UIColor.green.cgColor
+    decorateViewsWithBorder()
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -66,6 +66,10 @@ class MovieDetailsView: UIView {
   }
 
   public func setup(with viewModel: Movie?) {
+    guard self.viewModel != viewModel else {
+      return
+    }
+    
     self.viewModel = viewModel
 
     titleLabel.text = viewModel?.title
@@ -79,25 +83,26 @@ class MovieDetailsView: UIView {
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    let availableFrame = frame.insetBy(dx: layoutMargins.left, dy: layoutMargins.top).integral
+    let availableFrame = bounds.insetBy(dx: Constants.defaultPadding, dy: Constants.defaultPadding).integral
 
-    var currentTop: CGFloat = 0
+    var currentTop: CGFloat = availableFrame.origin.y
+    let left = availableFrame.origin.x
     let titleSize = titleLabel.sizeThatFits(availableFrame.size)
     titleLabel.size = titleSize
     titleLabel.top = currentTop
-    titleLabel.left = 0
+    titleLabel.left = left
+    currentTop = titleLabel.bottom + Constants.verticalPaddingBetweenTitleAndDate
 
-    currentTop = titleLabel.bottom + Constants.defaultPadding
     releaseDateLabel.sizeToFit()
     releaseDateLabel.top = currentTop
-    releaseDateLabel.left = 0
+    releaseDateLabel.left = left
+    currentTop = releaseDateLabel.bottom + Constants.verticalPaddingBetweenDateAndOverview
 
-    currentTop = releaseDateLabel.bottom + Constants.defaultPadding
-    let availableHeight = availableFrame.height - currentTop
+    let availableHeight = availableFrame.height - currentTop - Constants.defaultPadding
     let overviewSize = overviewLabel.sizeThatFits(CGSize(width: availableFrame.width, height: availableHeight))
     overviewLabel.size = overviewSize
     overviewLabel.top = currentTop
-    overviewLabel.left = 0
+    overviewLabel.left = left
   }
 
   override func sizeThatFits(_ size: CGSize) -> CGSize {
@@ -105,29 +110,49 @@ class MovieDetailsView: UIView {
       return .zero
     }
 
-    let boundingRectForTitle = viewModel.title.boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: Constants.titleFont], context: nil).integral
-
-    let boundingRectForReleaseDate = viewModel.releaseDate.boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: Constants.releaseDateFont], context: nil).integral
-
-    let boundingRectForOverview = viewModel.overview.boundingRect(with: size, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: Constants.overviewFont], context: nil).integral
-
-    let maxHeight = boundingRectForTitle.height + boundingRectForReleaseDate.height + boundingRectForOverview.height + 2 * Constants.defaultPadding
-
-    return CGSize(width: size.width, height: maxHeight)
+    // Adjust available width for insets
+    let availableSize = CGSize(width: size.width - 2 * Constants.defaultPadding, height: size.height)
+    let height = MovieDetailsView.height(for: viewModel, availableSize: availableSize) + 2 * Constants.defaultPadding
+    return CGSize(width: size.width, height: height)
   }
 
   class func size(for viewModel: Movie, width: CGFloat) -> CGSize {
+    // Adjust available width for insets
+    let availableSize = CGSize(width: width - 2 * Constants.defaultPadding, height: .greatestFiniteMagnitude)
+    let height = MovieDetailsView.height(for: viewModel, availableSize: availableSize) + 2 * Constants.defaultPadding
+    return CGSize(width: width, height: height)
+  }
 
-    let availableSize = CGSize(width: width - 2 * Constants.leftLayoutMargins, height: .greatestFiniteMagnitude)
-
+  private class func height(for viewModel: Movie, availableSize: CGSize) -> CGFloat {
     let boundingRectForTitle = viewModel.title.boundingRect(with: availableSize, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: Constants.titleFont], context: nil).integral
 
     let boundingRectForReleaseDate = viewModel.releaseDate.boundingRect(with: availableSize, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: Constants.releaseDateFont], context: nil).integral
 
     let boundingRectForOverview = viewModel.overview.boundingRect(with: availableSize, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: Constants.overviewFont], context: nil).integral
 
-    let maxHeight = boundingRectForTitle.height + boundingRectForReleaseDate.height + boundingRectForOverview.height + 2 * Constants.defaultPadding
+    // Add the padding between labels
+    let maxHeight = boundingRectForTitle.height + boundingRectForReleaseDate.height + boundingRectForOverview.height + Constants.verticalPaddingBetweenTitleAndDate + Constants.verticalPaddingBetweenDateAndOverview
 
-    return CGSize(width: width, height: maxHeight)
+    return maxHeight
   }
+
+  // A debug helper method
+  private func decorateViewsWithBorder() {
+    guard ProcessInfo().environment["DEBUG_BORDER"] != nil else {
+      return
+    }
+
+    layer.borderWidth = 1.0 / UIScreen.main.scale
+    layer.borderColor = UIColor.black.cgColor
+
+    titleLabel.layer.borderWidth = 1.0 / UIScreen.main.scale
+    titleLabel.layer.borderColor = UIColor.blue.cgColor
+
+    releaseDateLabel.layer.borderWidth = 1.0 / UIScreen.main.scale
+    releaseDateLabel.layer.borderColor = UIColor.green.cgColor
+
+    overviewLabel.layer.borderWidth = 1.0 / UIScreen.main.scale
+    overviewLabel.layer.borderColor = UIColor.red.cgColor
+  }
+
 }

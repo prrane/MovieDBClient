@@ -11,9 +11,7 @@ import UIKit
 class MovieCell: UITableViewCell {
 
   struct Constants {
-    static let verticalPadding: CGFloat = 8.0
-    static let horizontalPadding: CGFloat = 20.0
-    static let labelHorizontalPadding: CGFloat = 10.0
+    static let defaultPadding: CGFloat = 10.0
 
     static let titleFont: UIFont = UIFont.systemFont(ofSize: 16, weight: .medium)
     static let releaseDateFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .light)
@@ -42,6 +40,17 @@ class MovieCell: UITableViewCell {
     contentView.addSubview(posterView)
     contentView.addSubview(movieDetailsView)
     contentView.addSubview(hairlineBottom)
+
+    decorateViewsWithBorder()
+  }
+
+  // A debug helper method
+  private func decorateViewsWithBorder() {
+    guard ProcessInfo().environment["DEBUG_BORDER"] != nil else {
+      return
+    }
+    layer.borderWidth = 1.0 / UIScreen.main.scale
+    layer.borderColor = UIColor.magenta.cgColor
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -52,9 +61,19 @@ class MovieCell: UITableViewCell {
     self.viewModel = viewModel
 
     movieDetailsView.setup(with: viewModel)
-    posterView.setup(with: poster)
+    posterView.setup(with: poster, movie: viewModel)
 
-    layoutSubviews()
+    setNeedsLayout()
+    layoutIfNeeded()
+  }
+
+  public func setup(with viewModel: Movie?) {
+    self.viewModel = viewModel
+
+    movieDetailsView.setup(with: viewModel)
+
+    setNeedsLayout()
+    layoutIfNeeded()
   }
 
   override func prepareForReuse() {
@@ -66,9 +85,9 @@ class MovieCell: UITableViewCell {
 
   class func size(for viewModel: Movie, width: CGFloat) -> CGSize {
     let posterSize = PosterView.defaultSize
-    let availableWidth = width - posterSize.width - 2 * Constants.horizontalPadding
+    let availableWidth = width - posterSize.width
     let detailsViewSize = MovieDetailsView.size(for: viewModel, width: availableWidth)
-    let height = max(posterSize.height, detailsViewSize.height) + 2 * Constants.verticalPadding + 1.0 / UIScreen.main.scale
+    let height = max(posterSize.height, detailsViewSize.height) + 1.0 / UIScreen.main.scale
     return CGSize(width: width, height: height)
   }
 
@@ -79,14 +98,14 @@ class MovieCell: UITableViewCell {
       return
     }
 
-    let avilableFrame = contentView.frame.insetBy(dx: contentView.layoutMargins.left, dy: contentView.layoutMargins.top).integral
+    let avilableFrame = contentView.frame
     
     posterView.left = avilableFrame.minX
     posterView.size = PosterView.defaultSize
     posterView.top = avilableFrame.minY
 
-    let availableWidth = avilableFrame.width - posterView.width -  Constants.labelHorizontalPadding
-    movieDetailsView.left = posterView.right + Constants.labelHorizontalPadding
+    let availableWidth = avilableFrame.width - posterView.right
+    movieDetailsView.left = posterView.right
     movieDetailsView.top = posterView.top
 
     let detailsViewSize = movieDetailsView.sizeThatFits(CGSize(width: availableWidth, height: avilableFrame.height))

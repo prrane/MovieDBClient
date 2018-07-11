@@ -24,6 +24,7 @@ class SearchController: NSObject {
 
     CacheManager.searchResultsCache.addObserver(self, forKeyPath:#keyPath(SearchResultsCache.isUpdated), options: .new, context: &kSearchControllerContext)
   }
+
   override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
     guard context == &kSearchControllerContext else {
       super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)

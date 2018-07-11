@@ -67,6 +67,7 @@ class SearchOperation: AsyncOperation {
 
       CacheManager.keywordCache.add(keyword: keyword)
       CacheManager.searchResultsCache.add(results: response!)
+      print(response!.movies)
 
       self?.state = .finished
     }

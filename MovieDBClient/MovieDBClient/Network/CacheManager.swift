@@ -27,9 +27,10 @@ public protocol KeywordCache {
   func clearCache()
 }
 
-public protocol MoviePosterCache {
-  func moviePoster(forPath path: String, callback:@escaping (_ key: String, _ poster: UIImage?) -> Void)
-  func add(moviePoster poster: UIImage?, with path: String)
+@objc public protocol MoviePosterCache {
+  func moviePoster(for movieId: Int) -> UIImage?
+  func add(moviePoster poster: UIImage?, with movieId: Int)
+  var isUpdated: Bool { get }
 }
 
 // MARK: Cache Facade
@@ -37,7 +38,7 @@ public protocol MoviePosterCache {
 class CacheManager {
   public static let keywordCache: KeywordCache = KeywordCacheManager.shared
   public static let searchResultsCache: NSObject & SearchResultsCache = SearchResultsCacheManager.shared
-  public static let moviePosterCache: MoviePosterCache = MoviePosterCacheManager.shared
+  public static let moviePosterCache: NSObject & MoviePosterCache = MoviePosterCacheManager.shared
 }
 
 // MARK: - KeywordCacheManager
@@ -189,14 +190,14 @@ private final class SearchResultsCacheManager: NSObject, SearchResultsCache {
 
 // MARK: - MoviePosterCacheManager
 
-private final class MoviePosterCacheManager: MoviePosterCache {
+private final class MoviePosterCacheManager: NSObject,  MoviePosterCache {
 
   static let shared = MoviePosterCacheManager()
 
   private struct Constants {
-    static let imageCacheAgeLimit: TimeInterval = 30 * 60 * 60 * 24   // Cache for 30 days in seconds
-    static let maxImageMemoryCostLimit: UInt = 15 * 1024 * 1024       // Max 15 MB RAM
-    static let maxImageCacheSize: UInt = 30 * 1024 * 1024             // Max 30 MB disk cache
+    static let imageCacheAgeLimit: TimeInterval = 30 * 60 * 60 * 24            // Cache for 30 days in seconds
+    static let maxImageMemoryCostLimit: UInt = 30 * 1024 * 1024                // Max 30 MB RAM
+    static let maxImageCacheSize: UInt = 4 * Constants.maxImageMemoryCostLimit // Max 4 times RAM cache
     static let imageCacheKey = "PosterImageCache"
   }
 
@@ -208,18 +209,27 @@ private final class MoviePosterCacheManager: MoviePosterCache {
     return cache
   }()
 
-  func moviePoster(forPath path: String, callback: @escaping (String, UIImage?) -> Void) {
-    imageCache.object(forKey: path) { (_, key, poster) in
-      callback(key, poster as? UIImage)
-    }
+  // Using synchronus calls, as the image size is small and good RAM cache is available
+  func moviePoster(for movieId: Int) -> UIImage? {
+    return imageCache.object(forKey: "\(movieId)") as? UIImage
   }
 
-  func add(moviePoster poster: UIImage?, with path: String) {
+  func add(moviePoster poster: UIImage?, with movieId: Int) {
     guard let image = poster else {
       return
     }
 
-    imageCache.setObject(image, forKey: path)
+    imageCache.setObject(image, forKey: "\(movieId)")
+    isUpdated = true
+  }
+
+  @objc open dynamic var isUpdated: Bool = false {
+    willSet {
+      willChangeValue(forKey: "isUpdated")
+    }
+    didSet {
+      didChangeValue(forKey: "isUpdated")
+    }
   }
 }
 

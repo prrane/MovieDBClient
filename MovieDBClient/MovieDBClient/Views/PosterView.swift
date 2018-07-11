@@ -12,15 +12,15 @@ class PosterView: UIView {
 
   // Aspect ratio for poster is 1:1.5
   struct Constants {
-    static let width: CGFloat = 80
-    static let height: CGFloat = 80 * 1.5
+    static let width: CGFloat = 100
+    static let height: CGFloat = width * 1.5
 
-    static let defaultPadding: CGFloat = 8.0
+    static let defaultPadding: CGFloat = 10.0
   }
 
   let imageView: UIImageView = {
     let imageView: UIImageView = UIImageView(image: nil)
-    imageView.contentMode = .scaleAspectFit
+    imageView.contentMode = .scaleAspectFill
     imageView.isHidden = false
     return imageView
   }()
@@ -57,8 +57,7 @@ class PosterView: UIView {
     addSubview(loadingLabel)
     addSubview(imageView)
     
-//    layer.borderWidth = 1
-//    layer.borderColor = UIColor.red.cgColor
+    decorateViewsWithBorder()
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -66,12 +65,12 @@ class PosterView: UIView {
   }
 
   func prepareForReuse() {
-    imageView.image = nil
-    image = nil
+    self.imageView.image = nil
   }
 
-  func setup(with image: UIImage?) {
+  func setup(with image: UIImage?, movie: Movie?) {
     self.image = image
+
     setNeedsLayout()
     layoutIfNeeded()
   }
@@ -88,14 +87,28 @@ class PosterView: UIView {
     super.layoutSubviews()
 
     if image != nil {
-      imageView.frame = frame.insetBy(dx: layoutMargins.left, dy: layoutMargins.top).integral
+      imageView.frame = bounds.insetBy(dx: Constants.defaultPadding, dy: Constants.defaultPadding).integral
       loadingLabel.frame = .zero
     }
     else {
       imageView.frame = .zero
-      loadingLabel.frame = frame.insetBy(dx: layoutMargins.left, dy: layoutMargins.top).integral
-      loadingLabel.centerInSuperview(axis: [.vertical, .horizontal])
+      loadingLabel.frame = bounds.insetBy(dx: Constants.defaultPadding, dy: Constants.defaultPadding).integral
     }
   }
 
+  // A debug helper method
+  private func decorateViewsWithBorder() {
+    guard ProcessInfo().environment["DEBUG_BORDER"] != nil else {
+      return
+    }
+
+    layer.borderWidth = 1.0 / UIScreen.main.scale
+    layer.borderColor = UIColor.black.cgColor
+
+    imageView.layer.borderWidth = 1.0 / UIScreen.main.scale
+    imageView.layer.borderColor = UIColor.yellow.cgColor
+
+    loadingLabel.layer.borderWidth = 1.0 / UIScreen.main.scale
+    loadingLabel.layer.borderColor = UIColor.red.cgColor
+  }
 }

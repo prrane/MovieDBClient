@@ -16,7 +16,7 @@ class MovieResultsController: NSObject {
   private var refreshCallback: (() -> Void)?
   private var dismissSearchCallback: (() -> Void)?
 
-  let searchController = SearchController()
+  let downloadManager = DownloaManager()
 
   private var movieDatasource: SearchResultsCache {
     return CacheManager.searchResultsCache
@@ -43,7 +43,7 @@ class MovieResultsController: NSObject {
     self.refreshCallback = refreshCallback
     self.dismissSearchCallback = dismissSearchCallback
 
-    searchController.setup(with: refreshCallback)
+    downloadManager.setup(with: refreshCallback)
   }
 }
 
@@ -75,11 +75,22 @@ extension MovieResultsController: UITableViewDataSource {
 
   private func movieCell(for indexPath: IndexPath, in tableView: UITableView) -> MovieCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: MovieCell.reuseIdentifier, for: indexPath) as! MovieCell
-    cell.setup(with: movieDatasource.item(forIndexPath: indexPath), poster: nil)
+
+    guard let movie = movieDatasource.item(forIndexPath: indexPath) else {
+      return cell
+    }
+
+    if let poster = CacheManager.moviePosterCache.moviePoster(for: movie.id) {
+      cell.setup(with: movie, poster: poster)
+    }
+    else {
+      cell.setup(with: movie)
+      downloadManager.downloadPoster(for: movie)
+    }
 
     if indexPath.row == movieDatasource.movies(forSection: indexPath.section).count - 1 {
       if movieDatasource.shouldPrefetch(forSection: indexPath.section + 1) {
-        searchController.getNextPage()
+        downloadManager.getNextPage()
       }
     }
 
@@ -116,7 +127,7 @@ extension MovieResultsController: UITableViewDelegate {
   }
 
   func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-    return true
+    return isSearching
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -133,7 +144,7 @@ extension MovieResultsController: UITableViewDelegate {
         return
       }
 
-      searchController.search(keyword: searchKeyword)
+      downloadManager.search(keyword: searchKeyword)
       isSearching = false
       dismissSearchCallback?()
       refreshCallback?()
@@ -173,9 +184,8 @@ extension MovieResultsController: UISearchBarDelegate {
     }
 
     dismissSearchCallback?()
-    // Search keyword
-
-    searchController.search(keyword: keyword)
+    // Search keyword    
+    downloadManager.search(keyword: keyword)
   }
 
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
