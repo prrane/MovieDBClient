@@ -1,6 +1,4 @@
-//
 //  AsyncOperation.swift
-//  FlickrWall
 //
 //  Created by Prashant Rane.
 //

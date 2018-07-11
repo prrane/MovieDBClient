@@ -1,13 +1,11 @@
-//
-//  SearchOperation.swift
-//  FlickrWall
+//  MovieSearchOperation.swift
 //
 //  Created by Prashant Rane.
 //
 
 import Foundation
 
-class SearchOperation: AsyncOperation {
+class MovieSearchOperation: AsyncOperation {
 
   let currentPage: Int
   let keyword: String
@@ -75,7 +73,7 @@ class SearchOperation: AsyncOperation {
 }
 
 //MARK: - Download Helpers
-extension SearchOperation {
+extension MovieSearchOperation {
 
   // Prepate the search request
   //  http://api.themoviedb.org/3/search/movie?api_key=2696829a81b1b5827d515ff121700838&query=batman&page=1

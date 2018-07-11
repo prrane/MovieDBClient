@@ -1,6 +1,4 @@
-//
 //  MoviePosterDownloadOperation.swift
-//  MovieDBClient
 //
 //  Created by Prashant Rane.
 //

@@ -1,20 +1,18 @@
-//
-//  MoviePosterDownloader.swift
-//  MovieDBClient
+//  NetworkActivityDelegate.swift
 //
 //  Created by Prashant Rane.
 //
 
 import Foundation
 
-class DownloaManager: NSObject {
+class NetworkActivityDelegate: NSObject {
 
   // KVO
   private var kDownloaManagerContext = 1
   private var refreshCallback: (() -> Void)?
 
   private let posterDownloadManager = MoviePosterDownloadManager()
-  private let searchManager = SearchManager()
+  private let searchManager = MovieSearchManager()
 
   func setup(with refreshCallback: Callback) {
     self.refreshCallback = refreshCallback

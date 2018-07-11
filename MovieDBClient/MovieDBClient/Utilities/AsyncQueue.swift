@@ -1,6 +1,4 @@
-//
 //  SearchQueue.swift
-//  FlickrWall
 //
 //  Created by Prashant Rane.
 //

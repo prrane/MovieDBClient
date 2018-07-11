@@ -1,13 +1,11 @@
-//
 //  SearchManager.swift
-//  FlickrWall
 //
 //  Created by Prashant Rane.
 //
 
 import Foundation
 
-class SearchManager: NSObject {
+class MovieSearchManager: NSObject {
 
   struct Constants {
     static let errorNotificationKey = "SearchOperationError"
@@ -47,8 +45,8 @@ class SearchManager: NSObject {
   }
 
   private func restart() {
-    let operation = SearchOperation(with: keyword, page: currentPage)
-    operation.addObserver(self, forKeyPath: #keyPath(SearchOperation.state), options: .new, context: &kSearchManagerContext)
+    let operation = MovieSearchOperation(with: keyword, page: currentPage)
+    operation.addObserver(self, forKeyPath: #keyPath(MovieSearchOperation.state), options: .new, context: &kSearchManagerContext)
 
     queue.addOperation(operation)
   }
@@ -64,11 +62,11 @@ class SearchManager: NSObject {
       return
     }
 
-    guard let operation = object as? SearchOperation else {
+    guard let operation = object as? MovieSearchOperation else {
       return
     }
 
-    guard keyPath == #keyPath(SearchOperation.state) else {
+    guard keyPath == #keyPath(MovieSearchOperation.state) else {
       return
     }
 
@@ -81,7 +79,7 @@ class SearchManager: NSObject {
     }
 
     // Remove observer
-    operation.removeObserver(self, forKeyPath: #keyPath(SearchOperation.state))
+    operation.removeObserver(self, forKeyPath: #keyPath(MovieSearchOperation.state))
   }
 
 }

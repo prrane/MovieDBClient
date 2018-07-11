@@ -1,6 +1,4 @@
-//
 //  UIView+Framing.swift
-//  MovieDBClient
 //
 //  Created by Prashant Rane.
 //

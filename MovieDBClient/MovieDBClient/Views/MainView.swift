@@ -1,6 +1,4 @@
-//
 //  MainView.swift
-//  MovieDBClient
 //
 //  Created by Prashant Rane.
 //

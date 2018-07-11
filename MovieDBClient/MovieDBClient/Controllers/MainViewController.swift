@@ -1,6 +1,4 @@
-//
 //  ViewController.swift
-//  MovieDBClient
 //
 //  Created by Prashant Rane.
 //
@@ -18,7 +16,7 @@ class MainViewController: UIViewController {
   init() {
     super.init(nibName: nil, bundle: nil)
 
-    NotificationCenter.default.addObserver(self, selector: #selector(MainViewController.showError(notification:)), name: NSNotification.Name(rawValue: SearchManager.Constants.errorNotificationKey), object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(MainViewController.showError(notification:)), name: NSNotification.Name(rawValue: MovieSearchManager.Constants.errorNotificationKey), object: nil)
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -44,7 +42,7 @@ class MainViewController: UIViewController {
   }
 
   @objc func showError(notification: Notification) {
-    guard let errorMessage = notification.userInfo?[SearchManager.Constants.errorMessageKey] as? String else {
+    guard let errorMessage = notification.userInfo?[MovieSearchManager.Constants.errorMessageKey] as? String else {
       return
     }
 
@@ -57,7 +55,7 @@ class MainViewController: UIViewController {
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
 
-    // Clear cache
+    // Clear movie poster cache
     CacheManager.moviePosterCache.clearCache()
   }
 

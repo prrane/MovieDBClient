@@ -1,6 +1,4 @@
-//
 //  MovieResultsDataSource.swift
-//  MovieDBClient
 //
 //  Created by Prashant Rane.
 //
@@ -15,7 +13,7 @@ class MovieResultsController: NSObject {
   private var refreshCallback: (() -> Void)?
   private var dismissSearchCallback: (() -> Void)?
 
-  let downloadManager = DownloaManager()
+  let networkActivityDelegate = NetworkActivityDelegate()
 
   private var movieDatasource: SearchResultsCache {
     return CacheManager.searchResultsCache
@@ -42,7 +40,7 @@ class MovieResultsController: NSObject {
     self.refreshCallback = refreshCallback
     self.dismissSearchCallback = dismissSearchCallback
 
-    downloadManager.setup(with: refreshCallback)
+    networkActivityDelegate.setup(with: refreshCallback)
   }
 }
 
@@ -84,12 +82,12 @@ extension MovieResultsController: UITableViewDataSource {
     }
     else {
       cell.setup(with: movie)
-      downloadManager.downloadPoster(for: movie)
+      networkActivityDelegate.downloadPoster(for: movie)
     }
 
     if indexPath.row == movieDatasource.movies(forSection: indexPath.section).count - 1 {
       if movieDatasource.shouldPrefetch(forSection: indexPath.section + 1) {
-        downloadManager.getNextPage()
+        networkActivityDelegate.getNextPage()
       }
     }
 
@@ -143,7 +141,7 @@ extension MovieResultsController: UITableViewDelegate {
         return
       }
 
-      downloadManager.search(keyword: searchKeyword)
+      networkActivityDelegate.search(keyword: searchKeyword)
       isSearching = false
       dismissSearchCallback?()
       refreshCallback?()
@@ -184,7 +182,7 @@ extension MovieResultsController: UISearchBarDelegate {
 
     dismissSearchCallback?()
     // Search keyword    
-    downloadManager.search(keyword: keyword)
+    networkActivityDelegate.search(keyword: keyword)
   }
 
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

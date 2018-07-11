@@ -1,6 +1,4 @@
-//
 //  CacheManager.swift
-//  MovieDBClient
 //
 //  Created by Prashant Rane.
 //

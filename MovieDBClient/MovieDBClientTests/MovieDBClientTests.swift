@@ -1,7 +1,5 @@
-//
-//  MovieDBClientTests.swift
-//  MovieDBClientTests
-//
+//Tests.swift
+//Tests
 //  Created by Prashant Rane.
 //
 

@@ -1,7 +1,5 @@
-//
 //  PINCacheObjectSubscripting.h
 //  PINCache
-//
 //  Created by Rocir Marcos Leite Santiago on 4/2/16.
 //  Copyright © 2016 Pinterest. All rights reserved.
 //
