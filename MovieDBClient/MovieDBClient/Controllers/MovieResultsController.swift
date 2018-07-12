@@ -180,8 +180,11 @@ extension MovieResultsController: UISearchBarDelegate {
     }
 
     guard keyword.count > 2 else {
-      // show alert
-      print("you should enter a minimum 3 words for search")
+      dismissSearchCallback?()
+      
+      let errorMessage = NSLocalizedString("you should enter a minimum 3 words for search", comment: "An error message to be shown if user enters less than two characters to search movie")
+      NotificationCenter.default.post(name: NSNotification.Name(rawValue: MovieSearchManager.Constants.errorNotificationKey), object: nil, userInfo: [MovieSearchManager.Constants.errorMessageKey : errorMessage])
+
       return
     }
 
