@@ -12,6 +12,7 @@ class MovieResultsController: NSObject {
   // ivars to be set during initialization
   private var refreshCallback: (() -> Void)?
   private var dismissSearchCallback: (() -> Void)?
+  private var activityIndicatorCallback: ((Bool) -> Void)? // show/hide
 
   let networkActivityDelegate = NetworkActivityDelegate()
 
@@ -34,13 +35,17 @@ class MovieResultsController: NSObject {
     }
   }
 
-  private var isSearching: Bool = false
+  @objc open dynamic var isSearching: Bool = false
 
-  func setup(with refreshCallback: Callback, dismissSearchCallback: Callback) {
+  func setup(with refreshCallback: Callback, dismissSearchCallback: Callback, activityIndicatorCallback: ((Bool) -> Void)?) {
     self.refreshCallback = refreshCallback
     self.dismissSearchCallback = dismissSearchCallback
+    self.activityIndicatorCallback = activityIndicatorCallback
 
-    networkActivityDelegate.setup(with: refreshCallback)
+    networkActivityDelegate.setup { (isSearching: Bool) in
+      refreshCallback?()
+      activityIndicatorCallback?(isSearching)
+    }
   }
 }
 
@@ -181,8 +186,9 @@ extension MovieResultsController: UISearchBarDelegate {
     }
 
     dismissSearchCallback?()
-    // Search keyword    
+    // Search keyword
     networkActivityDelegate.search(keyword: keyword)
+    activityIndicatorCallback?(true)
   }
 
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

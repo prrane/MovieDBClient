@@ -35,7 +35,7 @@ class MainViewController: UIViewController {
     title = NSLocalizedString("Search Movies", comment: "Navigation bar title for Main Screen")
 
     // Setup datasource
-    resultController.setup(with: mainView.refresh, dismissSearchCallback: mainView.dismissSearch)
+    resultController.setup(with: mainView.refresh, dismissSearchCallback: mainView.dismissSearch, activityIndicatorCallback: mainView.displayActivityIndicator)
     
     // Setup main view
     mainView.setup()
@@ -45,6 +45,9 @@ class MainViewController: UIViewController {
     guard let errorMessage = notification.userInfo?[MovieSearchManager.Constants.errorMessageKey] as? String else {
       return
     }
+
+    // Hide activity indicator
+    mainView.displayActivityIndicator(false)
 
     let alert = UIAlertController(title: nil, message: errorMessage, preferredStyle: UIAlertControllerStyle.alert)
     alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Title for OK button from error alert"), style: UIAlertActionStyle.default, handler: nil))

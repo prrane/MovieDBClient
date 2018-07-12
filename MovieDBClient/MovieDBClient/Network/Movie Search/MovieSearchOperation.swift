@@ -94,7 +94,9 @@ extension MovieSearchOperation {
       return nil
     }
 
-    return URLRequest(url: url)
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 10.0
+    return request
   }
 
   private func fetchMovies(for keyword: String, page: Int, completion: @escaping (_ keyword: String, _ response: APIResponse?, _ error: String?) -> Void) {

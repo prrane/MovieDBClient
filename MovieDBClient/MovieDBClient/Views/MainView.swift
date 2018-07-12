@@ -7,6 +7,12 @@ import UIKit
 
 class MainView: UIView {
 
+  let activityIndicator: UIActivityIndicatorView = {
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    activityIndicator.hidesWhenStopped = true
+    return activityIndicator
+  }()
+
   let tableView: UITableView = {
     let tableView = UITableView(frame: .zero)
     tableView.tableFooterView = UIView(frame: .zero)
@@ -44,11 +50,13 @@ class MainView: UIView {
     searchController.searchBar.delegate = searchBarDelegate
 
     addSubview(tableView)
+    addSubview(activityIndicator)
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
   public func setup() {
     self.backgroundColor = .lightGray
 
@@ -59,6 +67,16 @@ class MainView: UIView {
     super.layoutSubviews()
 
     tableView.frame = frame
+    activityIndicator.center = center
+  }
+
+  func displayActivityIndicator(_ shouldDisplayActivityIndicator: Bool) -> Void {
+      if shouldDisplayActivityIndicator {
+        activityIndicator.startAnimating()
+      }
+      else {
+        activityIndicator.stopAnimating()
+      }
   }
 
   func refresh() {
@@ -66,7 +84,7 @@ class MainView: UIView {
   }
 
   func dismissSearch() {
-    searchController.isActive = false
+    searchController.isActive = false    
   }
   
 }

@@ -75,7 +75,9 @@ class MovieSearchManager: NSObject {
     }
 
     if let errorMessage = operation.errorMessage {
-      NotificationCenter.default.post(name: NSNotification.Name(rawValue: Constants.errorNotificationKey), object: nil, userInfo: [Constants.errorMessageKey : errorMessage])
+      DispatchQueue.main.async {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Constants.errorNotificationKey), object: nil, userInfo: [Constants.errorMessageKey : errorMessage])
+      }
     }
 
     // Remove observer

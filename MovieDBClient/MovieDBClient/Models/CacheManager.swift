@@ -8,6 +8,11 @@ import PINCache
 
 // MARK: Cache interfaces
 
+@objc public enum CacheState: Int {
+  case cleared
+  case itemCached
+}
+
 public protocol KeywordCache {
   func add(keyword: String)
   var keywords: [String] { get }
@@ -20,7 +25,8 @@ public protocol KeywordCache {
   func item(forIndexPath indexPath: IndexPath) -> Movie?
 
   var numberOfSections: Int { get }
-  var isUpdated: Bool { get }
+  var state: CacheState { get }
+
   func clearCache()
 }
 
@@ -29,7 +35,7 @@ public protocol KeywordCache {
   func add(moviePoster poster: UIImage?, with movieId: Int)
   func clearCache()
 
-  var isUpdated: Bool { get }
+  var state: CacheState { get }
 }
 
 // MARK: Cache Facade
@@ -134,7 +140,7 @@ private final class SearchResultsCacheManager: NSObject, SearchResultsCache {
   func add(results: APIResponse) {
     cache[results.currentPage] = results
     mostRecentSearchResults = results
-    isUpdated = true
+    state = .itemCached
   }
 
   func movies(forSection section: Int) -> [Movie] {
@@ -174,17 +180,10 @@ private final class SearchResultsCacheManager: NSObject, SearchResultsCache {
 
   func clearCache() {
     cache.removeAll()
-    isUpdated = true
+    state = .cleared
   }
 
-  @objc open dynamic var isUpdated: Bool = false {
-    willSet {
-      willChangeValue(forKey: "isUpdated")
-    }
-    didSet {
-      didChangeValue(forKey: "isUpdated")
-    }
-  }
+  @objc open dynamic var state: CacheState = .cleared
 }
 
 // MARK: - MoviePosterCacheManager
@@ -210,6 +209,7 @@ private final class MoviePosterCacheManager: NSObject,  MoviePosterCache {
 
   func clearCache() {
     imageCache.removeAllObjects()
+    state = .cleared
   }
 
   // Using synchronus calls, as the image size is small and good RAM cache is available
@@ -223,17 +223,10 @@ private final class MoviePosterCacheManager: NSObject,  MoviePosterCache {
     }
 
     imageCache.setObject(image, forKey: "\(movieId)")
-    isUpdated = true
+    state = .itemCached
   }
 
-  @objc open dynamic var isUpdated: Bool = false {
-    willSet {
-      willChangeValue(forKey: "isUpdated")
-    }
-    didSet {
-      didChangeValue(forKey: "isUpdated")
-    }
-  }
+  @objc open dynamic var state: CacheState = .cleared  
 }
 
 extension Sequence where Iterator.Element: Equatable {
