@@ -58,7 +58,7 @@ class MainView: UIView {
   }
 
   public func setup() {
-    self.backgroundColor = .lightGray
+    self.backgroundColor = .white
 
     refresh()
   }
@@ -66,7 +66,17 @@ class MainView: UIView {
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    tableView.frame = frame
+    if #available(iOS 11.0, *) {
+      let left = safeAreaInsets.left
+      let top = safeAreaInsets.top
+      let width = bounds.width - safeAreaInsets.left - safeAreaInsets.right
+      let height = bounds.height - safeAreaInsets.top - safeAreaInsets.bottom
+      tableView.frame = CGRect(x: left, y: top, width: width, height: height)
+    }
+    else {
+      tableView.frame = frame
+    }
+
     activityIndicator.center = center
   }
 
